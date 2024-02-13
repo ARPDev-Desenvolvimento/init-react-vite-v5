@@ -20,7 +20,7 @@ jobs:
       
       - name: Clone repository with access token
         run: |
-          git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git temp
+          git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v5.git temp
           cp -r temp/. .
         env:
           TOKEN: ${{ secrets.TOKEN }}
