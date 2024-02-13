@@ -25,7 +25,7 @@ jobs:
           git config --local user.email "arpdevdesenvolvimento@gmail.com"
           git add .
           git commit -m "Sync changes from pull request"
-          git push origin master
+          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
 
       - name: Sync changes to another repository
         run: |
