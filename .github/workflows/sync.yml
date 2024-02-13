@@ -37,9 +37,11 @@ jobs:
       - name: Push 
         run: |
           cd destino
+          git config --local user.name "ARPDev-Desenvolvimento"
+          git config --local user.email "arpdevdesenvolvimento@gmail.com"
           git add .
           git commit -m "Sua mensagem de commit aqui"
-          git push origin master
+          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
 
       # - name: Clone destination repository
       #   run: git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git temp
@@ -87,4 +89,4 @@ jobs:
         run: |
           rm -rf temp
           rm -rf destino
-          
+
