@@ -33,9 +33,13 @@ jobs:
       - name: push
         run: |
           cd destino/
+          git config --local user.name "ARPDev-Desenvolvimento"
+          git config --local user.email "arpdevdesenvolvimento@gmail.com"
           git add .
           git commit -m "sincronização v5"
           git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: clear arquivo
         run: |
