@@ -9,7 +9,7 @@ on:
 jobs:
   sync_changes:
     runs-on: ubuntu-latest
-    if: github.event.review.state == 'approved'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -26,6 +26,7 @@ jobs:
           GH_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Commit and push changes
+        if: github.event.pull_request.merged == true
         run: |
           git config --local user.name "ARPDev-Desenvolvimento"
           git config --local user.email "arpdevdesenvolvimento@gmail.com"
