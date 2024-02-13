@@ -2,7 +2,7 @@ name: Sync Changes
 
 on:
   pull_request:
-    types: ['close']
+    types: ['closed']
     branches:
       - master  # Substitua pela branch que deseja monitorar
 
