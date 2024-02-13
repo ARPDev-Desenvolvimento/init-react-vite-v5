@@ -32,3 +32,6 @@ jobs:
           git add .
           git commit -m "Sync changes from first repository"
           git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
+
+      - name: Remove temporary directory
+        run: rm -rf temp
