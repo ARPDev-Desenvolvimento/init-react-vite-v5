@@ -3,7 +3,7 @@ import './App.css'
 function App() {
 
   return (
-    <h2>Ola Task nova</h2>
+    <h2>Hello word Log</h2>
   )
 }
 
