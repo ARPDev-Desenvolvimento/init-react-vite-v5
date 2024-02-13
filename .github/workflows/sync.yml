@@ -1,0 +1,33 @@
+name: Sync Changes
+
+on:
+  push:
+    branches:
+      - master  # Substitua pela branch que deseja monitorar
+
+jobs:
+  sync_changes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Print Secret Value
+        run: |
+          echo "O valor da minha secret é: ${{ secrets.TOKEN }}"
+      
+      - name: Clone repository with access token
+        run: |
+          git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git temp
+          cp -r temp/. .
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "ARPDev-Desenvolvimento"
+          git config --local user.email "arpdevdesenvolvimento@gmail.com"
+          git add .
+          git commit -m "Sync changes from first repository"
+          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
