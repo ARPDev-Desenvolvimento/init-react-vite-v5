@@ -13,6 +13,11 @@ jobs:
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v2
+      
+      - name: Clear
+        run: |
+          rm -rf temp
+          rm -rf destino
 
       - name: Clone repositorio v4
         run: |
@@ -85,8 +90,8 @@ jobs:
       #     git commit -m "Sync changes from first repository"
       #     git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
       
-      - name: Remove temporary directory
-        run: |
-          rm -rf temp
-          rm -rf destino
+      # - name: Remove temporary directory
+      #   run: |
+      #     rm -rf temp
+      #     rm -rf destino
 
