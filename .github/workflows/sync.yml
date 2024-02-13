@@ -13,29 +13,40 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Print Secret Value
-        run: |
-          echo "O valor da minha secret é: ${{ secrets.TOKEN }}"
-      
-      - name: Clone repository with access token
-        run: |
-          git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git temp
-          cp -r temp/. .
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
-
-      - name: Pull changes from remote repository
-        run: |
-          git pull origin master
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ARPDev-Desenvolvimento/init-react-vite-v4
 
       - name: Commit and push changes
         run: |
           git config --local user.name "ARPDev-Desenvolvimento"
           git config --local user.email "arpdevdesenvolvimento@gmail.com"
           git add .
-          git commit -m "Sync changes from first repository"
-          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
+          git commit -m "Sync changes from pull request"
+          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git ${{ github.event.pull_request.head.ref }}
+
+      # - name: Print Secret Value
+      #   run: |
+      #     echo "O valor da minha secret é: ${{ secrets.TOKEN }}"
+      
+      # - name: Clone repository with access token
+      #   run: |
+      #     git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git temp
+      #     cp -r temp/. .
+      #   env:
+      #     TOKEN: ${{ secrets.TOKEN }}
+
+      # - name: Pull changes from remote repository
+      #   run: |
+      #     git pull origin master
+
+      # - name: Commit and push changes
+      #   run: |
+      #     git config --local user.name "ARPDev-Desenvolvimento"
+      #     git config --local user.email "arpdevdesenvolvimento@gmail.com"
+      #     git add .
+      #     git commit -m "Sync changes from first repository"
+      #     git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
       
       - name: Remove temporary directory
         run: rm -rf temp
