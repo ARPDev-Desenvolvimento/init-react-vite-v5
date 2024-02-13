@@ -11,8 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Checkout source repository
         uses: actions/checkout@v2
+
+      - name: Get PR metadata
+        id: pr_metadata
+        run: |
+          PR_TITLE=$(jq -r '.pull_request.title' $GITHUB_EVENT_PATH)
+          PR_DESCRIPTION=$(jq -r '.pull_request.body' $GITHUB_EVENT_PATH)
+          PR_NUMBER=$(jq -r '.pull_request.number' $GITHUB_EVENT_PATH)
+          echo "::set-output name=title::$PR_TITLE"
+          echo "::set-output name=description::$PR_DESCRIPTION"
+          echo "::set-output name=number::$PR_NUMBER"
 
       - name: clone v5
         run: git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v5.git temp
@@ -25,10 +38,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: clean
-        run: rm -rf temp/.env temp/config.ts temp/package.json temp/package-lock.json temp/*.md
+        run: rm -rf destino/src/*
       
       - name: copy
-        run: cp -rf temp/* destino/
+        run: cp -rf temp/src/* destino/src
 
       - name: push
         run: |
@@ -36,7 +49,7 @@ jobs:
           git config --local user.name "ARPDev-Desenvolvimento"
           git config --local user.email "arpdevdesenvolvimento@gmail.com"
           git add .
-          git commit -m "sincronização v5"
+          git commit -m "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
           git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
