@@ -1,10 +1,11 @@
-import './App.css'
+import "./App.css";
 
 function App() {
-
   return (
-    <h2>Ta mais um teste!</h2>
-  )
+    <>
+      <h1>Hello Word</h1>
+    </>
+  );
 }
 
-export default App
+export default App;
