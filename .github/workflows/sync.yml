@@ -11,11 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout source repository
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ARPDev-Desenvolvimento/init-react-vite-v4
+
+      - name: Clone destination repository
+        run: git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git destino
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Commit and push changes
         run: |
@@ -23,7 +25,13 @@ jobs:
           git config --local user.email "arpdevdesenvolvimento@gmail.com"
           git add .
           git commit -m "Sync changes from pull request"
-          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git ${{ github.event.pull_request.head.ref }}
+          git push origin master
+
+      - name: Sync changes to another repository
+        run: |
+          cd destino
+          git remote add destino https://github.com/ARPDev-Desenvolvimento/init-react-vite-v5.git
+          git push destino master
 
       # - name: Print Secret Value
       #   run: |
