@@ -8,6 +8,7 @@ on:
 
 jobs:
   sync_changes:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -56,21 +57,33 @@ jobs:
           git checkout -b feature/${{ steps.pr_metadata.outputs.number }}
           git add .
           git commit -m "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
-          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git feature/${{ steps.pr_metadata.outputs.number }}
+          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git sic/${{ steps.pr_metadata.outputs.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
-      - name: Open Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.TOKEN }}
-          commit-message: ${{ steps.pr_metadata.outputs.description }}
-          title: ${{ steps.pr_metadata.outputs.title }}
-          body: Pull request description
-          branch: feature/${{ steps.pr_metadata.outputs.number }}
-          base: master
-          repository: ARPDev-Desenvolvimento/init-react-vite-v4
-          delete-branch: true
+      # - name: Open Pull Request
+      #   uses: peter-evans/create-pull-request@v3
+      #   with:
+      #     token: ${{ secrets.TOKEN }}
+      #     commit-message: ${{ steps.pr_metadata.outputs.description }}
+      #     title: ${{ steps.pr_metadata.outputs.title }}
+      #     body: Pull request description
+      #     branch: feature/${{ steps.pr_metadata.outputs.number }}
+      #     base: master
+      #     repository: ARPDev-Desenvolvimento/init-react-vite-v4
+      #     delete-branch: true
+
+      # - name: Extract Branch Name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract_branch
+
+      # - name: Create Pull Request
+      #   uses: vsoch/pull-request-action@1.1.0
+      #   env:
+      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      #     PULL_REQUEST_BRANCH: "master"
+      #     PULL_REQUEST_TITLE: ${{ steps.extract_branch.outputs.branch}}
 
       - name: clear arquivo
         run: |
