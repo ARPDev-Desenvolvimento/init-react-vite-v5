@@ -1,4 +1,4 @@
-name: Sync Changes
+name: Repository synchronization
 
 on:
   pull_request:
@@ -43,24 +43,16 @@ jobs:
       - name: copy
         run: cp -rf temp/src/* destino/src
 
-      - name: Create pull request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.TOKEN }}
-          commit-message: "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
-          title: "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
-          body: "Changes from pull request ${{ steps.pr_metadata.outputs.number }}:\n${{ steps.pr_metadata.outputs.description }}"
-
-      # - name: push
-      #   run: |
-      #     cd destino/
-      #     git config --local user.name "ARPDev-Desenvolvimento"
-      #     git config --local user.email "arpdevdesenvolvimento@gmail.com"
-      #     git add .
-      #     git commit -m "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
-      #     git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      - name: push
+        run: |
+          cd destino/
+          git config --local user.name "ARPDev-Desenvolvimento"
+          git config --local user.email "arpdevdesenvolvimento@gmail.com"
+          git add .
+          git commit -m "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
+          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: clear arquivo
         run: |
