@@ -54,7 +54,7 @@ jobs:
           cd destino/
           git config --local user.name "ARPDev-Desenvolvimento"
           git config --local user.email "arpdevdesenvolvimento@gmail.com"
-          git checkout -b feature/${{ steps.pr_metadata.outputs.number }}
+          git checkout -b sincrono
           git add .
           git commit -m "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
           git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git sincrono
