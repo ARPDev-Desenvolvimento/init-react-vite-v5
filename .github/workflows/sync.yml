@@ -63,6 +63,7 @@ jobs:
           branch: feature/${{ steps.pr_metadata.outputs.number }}
           base: master
           token: ${{ secrets.TOKEN }}
+          delete-branch: true
 
       - name: clear arquivo
         run: |
