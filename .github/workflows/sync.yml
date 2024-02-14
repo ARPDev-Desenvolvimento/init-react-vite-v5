@@ -58,11 +58,12 @@ jobs:
       - name: Open Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
+          token: ${{ secrets.TOKEN }}
+          commit-message: ${{ steps.pr_metadata.outputs.description }}
           title: ${{ steps.pr_metadata.outputs.title }}
           body: ${{ steps.pr_metadata.outputs.description }}
           branch: feature/${{ steps.pr_metadata.outputs.number }}
           base: master
-          token: ${{ secrets.TOKEN }}
           delete-branch: true
 
       - name: clear arquivo
