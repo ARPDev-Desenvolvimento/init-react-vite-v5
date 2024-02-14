@@ -46,10 +46,12 @@ jobs:
       - name: create branch
         run: |
           cd destino/
+          git config --local user.name "ARPDev-Desenvolvimento"
+          git config --local user.email "arpdevdesenvolvimento@gmail.com"
           git checkout -b feature/${{ steps.pr_metadata.outputs.number }}
           git add .
           git commit -m "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
-          git push origin feature/${{ steps.pr_metadata.outputs.number }}
+          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git feature/${{ steps.pr_metadata.outputs.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
