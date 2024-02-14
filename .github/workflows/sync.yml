@@ -56,12 +56,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Open Pull Request
-        uses: thomaseizinger/create-pull-request@master
+        uses: peter-evans/create-pull-request@v3
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          head: feature/${{ steps.pr_metadata.outputs.number }}
+          token: ${{ secrets.TOKEN }}
+          committer: ${{ steps.pr_metadata.outputs.description }}
           title: ${{ steps.pr_metadata.outputs.title }}
+          branch: feature/${{ steps.pr_metadata.outputs.number }}
+          body: Pull request description
           base: master
+          repository: ARPDev-Desenvolvimento/init-react-vite-v4
+          delete-branch: true
 
       - name: clear arquivo
         run: |
