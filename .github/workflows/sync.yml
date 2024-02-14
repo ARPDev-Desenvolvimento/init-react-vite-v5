@@ -17,6 +17,11 @@ jobs:
       - name: Checkout source repository
         uses: actions/checkout@v2
 
+      - name: Set up Git
+        run: |
+          git config --global user.name 'ARPDev-Desenvolvimento'
+          git config --global user.email 'arpdevdesenvolvimento@gmail.com'
+
       - name: Get PR metadata
         id: pr_metadata
         run: |
@@ -59,10 +64,10 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.TOKEN }}
-          committer: ${{ steps.pr_metadata.outputs.description }}
+          commit-message: ${{ steps.pr_metadata.outputs.description }}
           title: ${{ steps.pr_metadata.outputs.title }}
-          branch: feature/${{ steps.pr_metadata.outputs.number }}
           body: Pull request description
+          branch: feature/${{ steps.pr_metadata.outputs.number }}
           base: master
           repository: ARPDev-Desenvolvimento/init-react-vite-v4
           delete-branch: true
