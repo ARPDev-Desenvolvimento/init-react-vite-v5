@@ -4,7 +4,7 @@ on:
   pull_request:
     types: ['closed']
     branches:
-      - master  # Substitua pela branch que deseja monitorar
+      - master
 
 jobs:
   sync_changes:
@@ -43,16 +43,24 @@ jobs:
       - name: copy
         run: cp -rf temp/src/* destino/src
 
-      - name: push
+      - name: create branch
         run: |
           cd destino/
-          git config --local user.name "ARPDev-Desenvolvimento"
-          git config --local user.email "arpdevdesenvolvimento@gmail.com"
+          git checkout -b feature/${{ steps.pr_metadata.outputs.number }}
           git add .
           git commit -m "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
-          git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git master
+          git push origin feature/${{ steps.pr_metadata.outputs.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+      - name: Open Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: ${{ steps.pr_metadata.outputs.title }}
+          body: ${{ steps.pr_metadata.outputs.description }}
+          branch: feature/${{ steps.pr_metadata.outputs.number }}
+          base: master
+          token: ${{ secrets.TOKEN }}
 
       - name: clear arquivo
         run: |
