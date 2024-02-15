@@ -8,7 +8,7 @@ on:
 
 jobs:
   sync_changes:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.actor != 'github-actions[bot]'
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.actor != 'github-actions[bot]' && github.event.pull_request.head.ref != 'sincrono'
     runs-on: ubuntu-latest
 
     steps:
