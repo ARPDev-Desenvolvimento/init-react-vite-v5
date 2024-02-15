@@ -57,6 +57,7 @@ jobs:
           git checkout -b sincrono
           git add .
           git commit -m "Synchronized changes from pull request ${{ steps.pr_metadata.outputs.number }}: ${{ steps.pr_metadata.outputs.title }}"
+          git pull origin sincrono
           git push https://${{secrets.TOKEN}}@github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git sincrono
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
