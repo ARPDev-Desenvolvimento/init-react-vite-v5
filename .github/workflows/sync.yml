@@ -12,9 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
       - name: Checkout source repository
         uses: actions/checkout@v2
 
@@ -22,6 +19,33 @@ jobs:
         run: |
           git config --global user.name 'ARPDev-Desenvolvimento'
           git config --global user.email 'arpdevdesenvolvimento@gmail.com'
+
+      - name: clone v5
+        run: git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v5.git temp
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      
+      - name: clone v4
+        run: git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git destino
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      
+      - name: clean
+        run: rm -rf destino/src/*
+      
+      - name: copy
+        run: cp -rf temp/src/* destino/src
+
+      - name: Check for changes
+        id: git_changes
+        run: |
+          cd destino
+          git fetch origin master
+          git diff --quiet origin/master...sincrono || (echo "Changes detected"; exit 1)
+      
+      - name: Install jq
+        if: steps.git_changes.outputs.stdout == 'Changes detected'
+        run: sudo apt-get update && sudo apt-get install -y jq    
 
       - name: Get PR metadata
         id: pr_metadata
@@ -33,23 +57,8 @@ jobs:
           echo "::set-output name=description::$PR_DESCRIPTION"
           echo "::set-output name=number::$PR_NUMBER"
 
-      - name: clone v5
-        run: git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v5.git temp
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-      
-      - name: clone v4
-        run: git clone https://github.com/ARPDev-Desenvolvimento/init-react-vite-v4.git destino
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-
-      - name: clean
-        run: rm -rf destino/src/*
-      
-      - name: copy
-        run: cp -rf temp/src/* destino/src
-
       - name: create branch
+        if: steps.git_changes.outputs.stdout == 'Changes detected'
         run: |
           cd destino/
           git config --local user.name "ARPDev-Desenvolvimento"
